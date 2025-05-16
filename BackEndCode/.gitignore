@@ -1,0 +1,32 @@
+/.metadata/
+# Maven
+/target
+!.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+/.gradle
+/build
+!gradle/wrapper/gradle-wrapper.jar
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+/.idea
+*.iml
+*.ipr
+*.iws
+/.classpath
+/.project
+/.settings/
+/.vscode
+
+# Environment files
+.env
+
+# Others
+*.class
