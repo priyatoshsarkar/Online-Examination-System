@@ -28,14 +28,35 @@ export class StartComponent implements OnInit {
     private _route: ActivatedRoute,
     private _question: QuestionService,
     private _quiz: QuizService
-  ) {}
+  ) { }
+
+  // ngOnInit(): void {
+  //   this.preventBackButton();
+  //   this.qid = this._route.snapshot.params.qid;
+  //   console.log(this.qid);
+  //   this.loadQuestions();
+  // }
 
   ngOnInit(): void {
     this.preventBackButton();
     this.qid = this._route.snapshot.params.qid;
-    console.log(this.qid);
+
+    const savedState = localStorage.getItem('quiz-state');
+    if (savedState) {
+      const state = JSON.parse(savedState);
+      if (state.qid === this.qid && !state.isSubmit) {
+        this.questions = state.questions;
+        this.timer = state.timer;
+        this.isSubmit = state.isSubmit;
+        this.startTimer();
+        return;
+      }
+    }
+
     this.loadQuestions();
   }
+
+
   loadQuestions() {
     this._question.getQuestionsOfQuizForTest(this.qid).subscribe(
       (data: any) => {
@@ -74,54 +95,100 @@ export class StartComponent implements OnInit {
     });
   }
 
+  // startTimer() {
+  //   let t = window.setInterval(() => {
+  //     //code
+  //     if (this.timer <= 0) {
+  //       this.evalQuiz();
+  //       clearInterval(t);
+  //     } else {
+  //       this.timer--;
+  //     }
+  //   }, 1000);
+  // }
+
   startTimer() {
     let t = window.setInterval(() => {
-      //code
       if (this.timer <= 0) {
         this.evalQuiz();
         clearInterval(t);
       } else {
         this.timer--;
+  
+        // 🔐 Save state
+        localStorage.setItem(
+          'quiz-state',
+          JSON.stringify({
+            qid: this.qid,
+            questions: this.questions,
+            timer: this.timer,
+            isSubmit: this.isSubmit,
+          })
+        );
       }
     }, 1000);
   }
-
+  
   getFormattedTime() {
     let mm = Math.floor(this.timer / 60);
     let ss = this.timer - mm * 60;
     return `${mm} min : ${ss} sec`;
   }
 
+  // evalQuiz() {
+  //   //calculation
+  //   //call to sever  to check questions
+  //   this._question.evalQuiz(this.questions).subscribe(
+  //     (data: any) => {
+  //       console.log(data);
+  //       this.marksGot = data.marksGot;
+  //       this.correctAnswers = data.correctAnswers;
+  //       this.attempted = data.attempted;
+  //       this.isSubmit = true;
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  //   // this.isSubmit = true;
+  //   // this.questions.forEach((q) => {
+  //   //   if (q.givenAnswer == q.answer) {
+  //   //     this.correctAnswers++;
+  //   //     let marksSingle =
+  //   //       this.questions[0].quiz.maxMarks / this.questions.length;
+  //   //     this.marksGot += marksSingle;
+  //   //   }
+  //   //   if (q.givenAnswer.trim() != '') {
+  //   //     this.attempted++;
+  //   //   }
+  //   // });
+  //   // console.log('Correct Answers :' + this.correctAnswers);
+  //   // console.log('Marks Got ' + this.marksGot);
+  //   // console.log('attempted ' + this.attempted);
+  //   // console.log(this.questions);
+  // }
+
+
   evalQuiz() {
-    //calculation
-    //call to sever  to check questions
     this._question.evalQuiz(this.questions).subscribe(
       (data: any) => {
-        console.log(data);
         this.marksGot = data.marksGot;
         this.correctAnswers = data.correctAnswers;
         this.attempted = data.attempted;
         this.isSubmit = true;
+  
+        // 🧹 Clear saved state
+        localStorage.removeItem('quiz-state');
       },
       (error) => {
         console.log(error);
       }
     );
-    // this.isSubmit = true;
-    // this.questions.forEach((q) => {
-    //   if (q.givenAnswer == q.answer) {
-    //     this.correctAnswers++;
-    //     let marksSingle =
-    //       this.questions[0].quiz.maxMarks / this.questions.length;
-    //     this.marksGot += marksSingle;
-    //   }
-    //   if (q.givenAnswer.trim() != '') {
-    //     this.attempted++;
-    //   }
-    // });
-    // console.log('Correct Answers :' + this.correctAnswers);
-    // console.log('Marks Got ' + this.marksGot);
-    // console.log('attempted ' + this.attempted);
-    // console.log(this.questions);
   }
+
+  printPage(): void {
+    window.print();
+  }
+  
+    
 }
