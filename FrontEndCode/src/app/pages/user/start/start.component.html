@@ -2,8 +2,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-2">
-        <!-- instructions -->
-        <h3>instructions</h3>
+        <!-- Camera Proctoring -->
+        <app-camera-proctoring (multipleFacesDetected)="onMultipleFacesDetected($event)"></app-camera-proctoring>
+        <div *ngIf="showMultipleFacesWarning" class="alert alert-warning mt10">
+          Warning: Multiple faces detected!
+        </div>
       </div>
       <div class="col-md-8">
         <!-- questions -->

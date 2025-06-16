@@ -12,6 +12,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./start.component.css'],
 })
 export class StartComponent implements OnInit {
+  showMultipleFacesWarning: boolean = false;
   qid;
   questions;
 
@@ -29,6 +30,10 @@ export class StartComponent implements OnInit {
     private _question: QuestionService,
     private _quiz: QuizService
   ) { }
+
+  onMultipleFacesDetected(detected: boolean) {
+    this.showMultipleFacesWarning = detected;
+  }
 
   // ngOnInit(): void {
   //   this.preventBackButton();

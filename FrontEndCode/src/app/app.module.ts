@@ -42,6 +42,7 @@ import { InstructionsComponent } from './pages/user/instructions/instructions.co
 import { StartComponent } from './pages/user/start/start.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
+import { CameraProctoringComponent } from './pages/user/camera-proctoring/camera-proctoring.component';
 
 @NgModule({
   declarations: [
@@ -67,6 +68,7 @@ import { NgxUiLoaderHttpModule, NgxUiLoaderModule } from 'ngx-ui-loader';
     LoadQuizComponent,
     InstructionsComponent,
     StartComponent,
+    CameraProctoringComponent,
   ],
   imports: [
     BrowserModule,

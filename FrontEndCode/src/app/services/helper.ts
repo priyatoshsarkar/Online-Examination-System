@@ -1,2 +1,2 @@
-let baseUrl = 'https://exambackend.loca.lt';
+let baseUrl = 'http://localhost:8080';
 export default baseUrl;
